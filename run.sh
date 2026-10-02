@@ -28,6 +28,11 @@ function install {
     pre-commit install --install-hooks
 }
 
+function clean {
+    pushd infra; vagrant destroy -f; popd
+    ssh-keygen -R '[pyinfra.local]:2022'
+}
+
 
 # utilities
 

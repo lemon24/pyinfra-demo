@@ -1,0 +1,48 @@
+Vagrant.configure("2") do |config|
+
+  config.vagrant.plugins = ["vagrant-qemu", "vagrant-hostmanager"]
+
+  # not using config.vm.box because "HCP Vagrant is being deprecated."
+
+  config.vm.provider :qemu do |qemu|
+    # from https://cloud-images.ubuntu.com/resolute/20260927/
+    qemu.image_path = File.expand_path("~/Downloads/resolute-server-cloudimg-arm64.img")
+    qemu.machine = "virt,accel=hvf,highmem=off"
+    qemu.cpu = "max"
+    qemu.smp = "2"
+    qemu.memory = "1G"
+    qemu.disk_resize = "8G"
+  end
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "pyinfra"
+  config.vm.hostname = "pyinfra.local"
+
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = false
+  config.hostmanager.aliases = ["app.pyinfra.local"]
+
+  config.vm.network "forwarded_port", guest: 22, host: 2022
+  config.vm.network "forwarded_port", guest: 80, host: 2080
+
+  config.ssh.port = 2022
+  config.ssh.username = "root"
+  # ssh-keygen -t ed25519 -f ~/.ssh/vagrant_key -C vagrant
+  config.ssh.private_key_path = File.expand_path("~/.ssh/vagrant_key")
+  public_key = File.read(File.expand_path("~/.ssh/vagrant_key.pub")).strip
+
+  config.vm.cloud_init do |cloud_init|
+    cloud_init.content_type = "text/cloud-config"
+    cloud_init.inline = <<~CLOUD_CONFIG
+
+      users:
+        - name: root
+          ssh_authorized_keys:
+            - #{public_key}
+
+    CLOUD_CONFIG
+  end
+
+end
