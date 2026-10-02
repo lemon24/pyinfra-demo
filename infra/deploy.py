@@ -6,7 +6,7 @@ from pyinfra.operations import server
 
 apt.update(name="apt update", cache_time=24 * 3600)
 
-apt.packages('nginx', name="install nginx")
+apt.packages(['nginx', 'python3-certbot-nginx'], name="install nginx")
 
 disable_default = files.link(
     name="disable default site",
