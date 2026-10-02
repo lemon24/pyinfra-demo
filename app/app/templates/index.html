@@ -1,0 +1,38 @@
+<title>Hello, {{ name or 'stranger' }}!</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<h1>Hello, {{ name or 'stranger' }}!</h1>
+
+{% if not name %}
+
+<form method="post">
+
+{% for category, message in get_flashed_messages(with_categories=True) %}
+    <p class="{{ category }}">{{ message }}</p>
+{% else %}
+    <p>Do I know you?</p>
+{% endfor %}
+
+<input type="text" name="name" placeholder="your name">
+<input type="submit" value="go">
+
+</form>
+
+{% else %}
+
+<p><a href="{{ url_for('index') }}">Not {{ name }}?</a></p>
+
+{% endif %}
+
+
+{% if 'local' not in request.host %}
+
+<hr>
+<p>
+    📖 Read <a href="https://death.andgravity.com/">death.andgravity.com</a>!
+    <br>
+    ⭐️ Star <a href="https://github.com/lemon24/reader">lemon24/reader</a>!
+</p>
+
+{% endif %}

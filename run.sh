@@ -25,6 +25,7 @@ readonly SCRIPT="$PROJECT_ROOT/$( basename "$0" )"
 
 function install {
     pip install --group dev
+    pip install -e app
     pre-commit install --install-hooks
 }
 

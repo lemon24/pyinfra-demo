@@ -7,7 +7,7 @@ skip-string-normalization = true
 [tool.isort]
 profile = "black"
 py_version = 314
-src_paths = ["infra"]
+src_paths = ["infra", "app"]
 skip_gitignore = true
 force_single_line = true
 order_by_type = false

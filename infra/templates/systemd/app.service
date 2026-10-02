@@ -1,0 +1,18 @@
+[Unit]
+Description=app gunicorn service
+
+[Service]
+Type=exec
+
+User=app
+Group=app
+RuntimeDirectory=app
+ConfigurationDirectory=opt/app
+
+ExecStart=/opt/app/bin/gunicorn app:app --bind unix:/run/app/app.sock --preload
+
+ExecStartPost=timeout 5 sh -c 'while [ ! -e /run/app/app.sock ]; do sleep .1; done'
+ExecStartPost=chgrp app-socket /run/app/app.sock
+
+[Install]
+WantedBy=multi-user.target

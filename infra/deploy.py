@@ -22,3 +22,5 @@ server.service(
 
 if host.data.get('home_domain'):
     local.include('tasks/home.py')
+if host.data.get('app_domain'):
+    local.include('tasks/app.py')
