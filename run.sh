@@ -32,6 +32,8 @@ function install {
 function clean {
     pushd infra; vagrant destroy -f; popd
     ssh-keygen -R '[pyinfra.local]:2022'
+    ssh-keygen -R pyinfra.andgravity.com
+    ssh-keygen -R app.pyinfra.andgravity.com
 }
 
 
