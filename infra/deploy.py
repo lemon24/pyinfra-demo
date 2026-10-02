@@ -1,3 +1,5 @@
+from pyinfra import host
+from pyinfra import local
 from pyinfra.operations import apt
 from pyinfra.operations import files
 from pyinfra.operations import server
@@ -17,3 +19,6 @@ server.service(
     reloaded=True,
     _if=disable_default.did_change,
 )
+
+if host.data.get('home_domain'):
+    local.include('tasks/home.py')

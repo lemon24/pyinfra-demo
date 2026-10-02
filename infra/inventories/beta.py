@@ -1,8 +1,7 @@
-# group_name = [host1, host2, ...]
+# group_name = [(host1, {'some custom': 'host data'}), ...]
 
-my_hosts = ['pyinfra.local']
-
-# you can have more groups:
-#
-# db_servers = ['db-1.net', 'db-2.net']
-# web_servers = [i.hostname for i in aws.ec2.list_instances(asg='my-asg')]
+my_hosts = [
+    ('pyinfra.local', {
+        'home_domain': 'pyinfra.local',
+    }),
+]  # fmt: skip
