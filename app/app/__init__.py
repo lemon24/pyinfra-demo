@@ -9,7 +9,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 app = Flask(__name__)
 
 if config_dir := os.environ.get('CONFIGURATION_DIRECTORY'):
-    app.config.from_pyfile(f"{config_dir}/config.py", silent=True)
+    app.config.from_pyfile(f"{config_dir}/config.py")
     app.wsgi_app = ProxyFix(app.wsgi_app)
 else:
     app.config.update(SECRET_KEY='secret')

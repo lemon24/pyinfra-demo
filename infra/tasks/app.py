@@ -7,6 +7,7 @@ from pyinfra.operations import systemd
 from pyinfra.operations.util import any_changed
 
 from modules import nginx
+from modules import secrets
 
 server.group('app', name="create app group")
 server.group('app-socket', name="create socket group")
@@ -43,6 +44,15 @@ install_app = server.shell(
     _if=sync_files.did_change,
 )
 
+write_config = files.template(
+    name="write config",
+    src='templates/config.py.jinja',
+    dest='/etc/opt/app/config.py',
+    group='app',
+    mode=640,
+    get_secret=secrets.get_secret,
+)
+
 write_service = files.template(
     name="write service",
     src='templates/systemd/app.service',
@@ -54,7 +64,7 @@ systemd.service(
     enabled=True,
     restarted=True,
     daemon_reload=True,
-    _if=any_changed(install_app, write_service),
+    _if=any_changed(install_app, write_config, write_service),
 )
 
 nginx.site('templates/nginx/app.conf', host.data.app_domain)
