@@ -34,6 +34,15 @@ function clean {
     ssh-keygen -R '[pyinfra.local]:2022'
     ssh-keygen -R pyinfra.andgravity.com
     ssh-keygen -R app.pyinfra.andgravity.com
+    rm -f hello.txt
+}
+
+function reset {
+    clean
+    pushd infra
+    vagrant up
+    pyinfra inventories/beta.py apt.update -y
+    popd
 }
 
 
